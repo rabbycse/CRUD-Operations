@@ -1,4 +1,6 @@
-# CRUD-Operations
+# CRUD Operation With ASP.NET Core 2.2 MVC
+
+## Requirements
 
 - Create an Asp.net Core MVC project
 - Setup a library project
@@ -8,3 +10,5 @@
 - Create DBContext, UnitOfWork, Repository and Entity for 3 tables with 1 to many and many to many relation
 - Activate migration
 - Create controller and view page
+
+This repository contains CRUD Operation With ASP.NET Core 2.2 MVC course.
