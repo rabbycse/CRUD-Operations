@@ -1,4 +1,4 @@
-# CRUD Operation With ASP.NET Core 2.2 MVC
+This repository contains CRUD Operation With ASP.NET Core 2.2 MVC course.
 
 ## Requirements
 
@@ -11,4 +11,3 @@
 - Activate migration
 - Create controller and view page
 
-This repository contains CRUD Operation With ASP.NET Core 2.2 MVC course.
