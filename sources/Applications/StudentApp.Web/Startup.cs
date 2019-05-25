@@ -13,20 +13,28 @@ using Microsoft.EntityFrameworkCore;
 using StudentApp.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Autofac;
+using StudentApp.Data;
+using Autofac.Extensions.DependencyInjection;
 
 namespace StudentApp.Web
 {
-    public class Startup
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+    using StudentApp.Data;
+    using StudentApp.Data.Extensions;
+    public class Startup 
     {
+        public IConfiguration Configuration { get; }
+        public static IContainer AutofacContainer { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -35,14 +43,21 @@ namespace StudentApp.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            var connectionStringName = "DefaultConnection";
+            var migrationAssemblyName = typeof(Startup).Assembly.FullName;
+            services.AddDataExtension(connectionStringName, migrationAssemblyName);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //Entity Framework configuration
+            services.AddEntityFrameworkSqlServer();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterModule(new StudenAppModule(Configuration, connectionStringName, migrationAssemblyName));
+
+            AutofacContainer = builder.Build();
+
+            return new AutofacServiceProvider(AutofacContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
