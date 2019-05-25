@@ -1,4 +1,4 @@
-This repository contains CRUD Operation With ASP.NET Core 2.2 MVC course.
+This repository contains **CRUD Operation** With ASP.NET Core 2.2 MVC course.
 
 ## Requirements
 
